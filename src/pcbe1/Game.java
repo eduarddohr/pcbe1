@@ -38,12 +38,7 @@ public class Game {
 		for(int i = 0; i < nrPlayers; i++) {
 			Player player = new Player(semaphore, "player " + (i+1));
 			player.start();
-		}
-		
-		System.out.println(Game.bricks.size());
-		System.out.println(Game.wood.size());
-		System.out.println(Game.stones.size());
-		
+		}	
 		
 	}
 	

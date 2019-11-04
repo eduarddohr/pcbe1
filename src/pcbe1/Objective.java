@@ -4,7 +4,8 @@ import java.util.*;
 
 public abstract class Objective {
 	protected ArrayList<Resource> objectiveResources;
-	protected int points;	
+	protected int points;
+	
 	protected Map<String,ArrayList<Resource>> checkIfCanBuild(ArrayList<Resource> resources){
 		//parametru lista de resurse ale jucatorului intoarce dictionar cu cheile locked si needed
 		Map<String,ArrayList<Resource>> response = new HashMap<String,ArrayList<Resource>>();
@@ -17,7 +18,7 @@ public abstract class Objective {
 		else {
 			for(Resource res: objectiveResources) {
 				if(resources.contains(res)) {
-					System.out.println("Contains"+res);
+					//System.out.println("Contains"+res);
 					locked.add(res);
 					resources.remove(res);
 				}

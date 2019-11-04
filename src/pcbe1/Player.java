@@ -37,11 +37,24 @@ public class Player extends Thread{
 	public void run(){
 		
 		try {
-			//semaphore.acquire();
 			getRandomResources(3);
-			//semaphore.release();
+			//System.out.println("Hello, me is player and will implement the whole game -" + name);
+			ArrayList<Objective> objectiveslist = Game.objectiveslist;
+			Map<String, ArrayList<Resource>> nLResorcesMap;
 			
-			System.out.println("Hello, me is player and will implement the whole game -" + name);
+			System.out.println("resorces: " + name + " " + resources.toString());
+			
+			for(int i = 0; i < 1; i++) {
+				for (Objective objective : objectiveslist) {
+					nLResorcesMap = objective.checkIfCanBuild(resources);
+					nLResorcesMap.toString();
+					//System.out.println(name);
+					if(nLResorcesMap.get("needed").isEmpty()) {
+						System.out.println(name + " can build " + objective.toString());
+					}
+					//System.out.println(name + " " + objective.toString());
+				}
+			}
 
 		}
 		catch(Exception e) {
