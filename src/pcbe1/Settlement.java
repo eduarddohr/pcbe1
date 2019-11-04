@@ -1,14 +1,14 @@
 package pcbe1;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Settlement extends Objective {
 
 	public Settlement() {
 		this.points = 1;
-		this.objectiveResourceMap = new HashMap<Resource, Integer>();
-		this.objectiveResourceMap.put(new Wood(), 1);
-		this.objectiveResourceMap.put(new Stone(), 1);
+		this.objectiveResources = new ArrayList<>();
+		this.objectiveResources.add(new Stone());
+		this.objectiveResources.add(new Wood());
 	}
 
 }

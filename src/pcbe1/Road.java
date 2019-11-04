@@ -1,15 +1,24 @@
 package pcbe1;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
-public class Road extends Objective{
+public class Road extends Objective implements Resource{
 
 	public Road() {
 		this.points = 0;
-		this.objectiveResourceMap = new HashMap<Resource, Integer>();
-		this.objectiveResourceMap.put(new Brick(), 1);
-		this.objectiveResourceMap.put(new Wood(), 1);
+		this.objectiveResources = new ArrayList<>();
+		this.objectiveResources.add(new Brick());
+		this.objectiveResources.add(new Wood());
+		
+	}
+	
+	public String getName() {
+		return "Road";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof Road) && ((Road)obj).getName()==this.getName();
 	}
 
 }

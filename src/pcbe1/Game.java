@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.Semaphore;
+import java.util.*;
+
 
 public class Game {
 
@@ -44,4 +46,16 @@ public class Game {
 		
 		
 	}
+	
+	//test
+	
+//	public static void main(String[] argv) {
+//		ArrayList<Resource> having = new ArrayList<>();
+//		Town town = new Town();
+//		having.add(new Brick());
+//		having.add(new Wood());
+//		Map<String,ArrayList<Resource>> can = town.checkIfCanBuild(having);
+//		System.out.println(can.get("needed").toString());
+//		System.out.println(can.get("locked").toString());
+//	}
 }
