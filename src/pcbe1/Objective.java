@@ -10,7 +10,7 @@ public abstract class Objective {
 	protected Map<String,ArrayList<Resource>> checkIfCanBuild(ArrayList<Resource> resurse){
 		//parametru lista de resurse ale jucatorului intoarce dictionar cu cheile locked si needed
 		
-		return cevaMap;
+		return null;
 	}
 	protected int getPoints() {
 		return points;

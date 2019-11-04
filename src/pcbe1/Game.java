@@ -22,7 +22,7 @@ public class Game {
 	public static void main(String[] argv){
 		
 		for(int i = 0; i < nrPlayers; i++) {
-			Player player = new Player();
+			Player player = new Player("cineva");
 			player.start();
 		}
 	}
