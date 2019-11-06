@@ -1,6 +1,11 @@
-package pcbe1;
+package objective;
 
 import java.util.ArrayList;
+
+import resource.Brick;
+import resource.Resource;
+import resource.Stone;
+import resource.Wood;
 
 public class Town extends Objective {
 

@@ -1,4 +1,4 @@
-package pcbe1;
+package resource;
 
 public class Stone implements Resource {
 	public String getName() {

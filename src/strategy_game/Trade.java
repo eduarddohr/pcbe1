@@ -1,4 +1,6 @@
-package pcbe1;
+package strategy_game;
+
+import resource.Resource;
 
 public class Trade {
 	private String name;

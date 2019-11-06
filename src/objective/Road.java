@@ -1,6 +1,10 @@
-package pcbe1;
+package objective;
 
 import java.util.ArrayList;
+
+import resource.Brick;
+import resource.Resource;
+import resource.Wood;
 
 public class Road extends Objective implements Resource{
 

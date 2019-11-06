@@ -1,4 +1,4 @@
-package pcbe1;
+package resource;
 
 public class Brick implements Resource {
 	public String getName() {

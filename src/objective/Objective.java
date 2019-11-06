@@ -1,12 +1,14 @@
-package pcbe1;
+package objective;
 
 import java.util.*;
+
+import resource.Resource;
 
 public abstract class Objective {
 	protected ArrayList<Resource> objectiveResources;
 	protected int points;
 	
-	protected Map<String,ArrayList<Resource>> checkIfCanBuild(ArrayList<Resource> resources){
+	public Map<String,ArrayList<Resource>> checkIfCanBuild(ArrayList<Resource> resources){
 		//parametru lista de resurse ale jucatorului intoarce dictionar cu cheile locked si needed
 		Map<String,ArrayList<Resource>> response = new HashMap<String,ArrayList<Resource>>();
 		ArrayList<Resource> needed = new ArrayList<Resource>();
@@ -18,7 +20,6 @@ public abstract class Objective {
 		else {
 			for(Resource res: objectiveResources) {
 				if(resources.contains(res)) {
-					//System.out.println("Contains"+res);
 					locked.add(res);
 					resources.remove(res);
 				}
@@ -43,7 +44,7 @@ public abstract class Objective {
 		return this.hashCode()==obj.hashCode();
 	}
 	
-	protected int getPoints() {
+	public int getPoints() {
 		return points;
 	}
 	

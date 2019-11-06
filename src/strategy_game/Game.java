@@ -1,9 +1,18 @@
-package pcbe1;
+package strategy_game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
+
+import objective.Objective;
+import objective.Road;
+import objective.Settlement;
+import objective.Town;
+import resource.Brick;
+import resource.Resource;
+import resource.Stone;
+import resource.Wood;
 
 public class Game {
     // liste resurse

@@ -1,6 +1,9 @@
-package pcbe1;
+package objective;
 
 import java.util.ArrayList;
+
+import resource.Stone;
+import resource.Wood;
 
 public class Settlement extends Objective {
 
