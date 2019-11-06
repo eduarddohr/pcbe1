@@ -33,6 +33,16 @@ public abstract class Objective {
 		return response;
 	}
 	
+	@Override
+	public int hashCode() {
+		return this.getClass().toString().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return this.hashCode()==obj.hashCode();
+	}
+	
 	protected int getPoints() {
 		return points;
 	}
