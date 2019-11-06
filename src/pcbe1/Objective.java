@@ -29,6 +29,7 @@ public abstract class Objective {
 		}
 		response.put("needed", needed);
 		response.put("locked", locked);
+		response.put("remaining", resources);
 		return response;
 	}
 	

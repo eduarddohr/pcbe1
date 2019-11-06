@@ -44,9 +44,9 @@ public class Player extends Thread{
 			
 			System.out.println("resorces: " + name + " " + resources.toString());
 			
-			for(int i = 0; i < 1; i++) {
+			for(int i = 0; i < 10; i++) {
 				for (Objective objective : objectiveslist) {
-					nLResorcesMap = objective.checkIfCanBuild(resources);
+					nLResorcesMap = objective.checkIfCanBuild(new ArrayList<Resource>(resources));
 					nLResorcesMap.toString();
 					//System.out.println(name);
 					if(nLResorcesMap.get("needed").isEmpty()) {
