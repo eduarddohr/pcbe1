@@ -25,6 +25,8 @@ public class Game {
 	private static Semaphore woodSemaphore = new Semaphore(1);
 	private static Semaphore stonesSemaphore = new Semaphore(1);
 	
+	private static Semaphore tradeSemaphore = new Semaphore(1);
+	
 	//lista IMUTABILA cu obiective puse in ordinea importantei lor
 	final public static ArrayList < Objective > objectiveslist = new ArrayList < Objective > (
 			Arrays.asList(
@@ -32,12 +34,20 @@ public class Game {
 			 new Settlement(),
 			 new Road()));
 	
-	private ArrayList<Trade> marketplace;
+	private static ArrayList<Trade> marketplace;
 	
 	final static int nrPlayers = 4;
 	
-	private boolean checkIfCanTrade(){
-		return true;
+	public static String getExchangeResourceName(Resource needed){
+		if(marketplace == null || marketplace.isEmpty()) {
+			return null;
+		}
+		for(Trade trade: marketplace) {
+			if(trade.getGivenResourceName().equals(needed.getClass().toString())) {
+				return trade.getTakenResourceName();
+			}
+		}
+		return null;
 	}
 	
 	public Game() {
@@ -46,6 +56,18 @@ public class Game {
 			wood.add(new Wood());
 			stones.add(new Stone());
 		}
+	}
+	
+	public static boolean makeTrade(Trade trade) throws InterruptedException {
+		Trade originalTrade = null;
+		tradeSemaphore.acquire();
+		int index = marketplace.indexOf(trade);
+		if(index >= 0) {
+			originalTrade = marketplace.remove(index);
+		}
+		tradeSemaphore.release();
+		
+		return true;
 	}
 	
 	public static void main(String[] argv){

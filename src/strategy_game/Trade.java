@@ -12,4 +12,19 @@ public class Trade {
 		this.givenRes = givenRes;
 		this.takenRes = takenRes;
 	}
+	
+	public String getGivenResourceName() {
+		return this.givenRes.getClass().toString();
+	}
+	
+	public String getTakenResourceName() {
+		return this.takenRes.getClass().toString();
+	}
+	
+	@Override 
+	public boolean equals(Object obj) {
+		return obj instanceof Trade && 
+				((Trade)obj).givenRes.getClass().toString().equals(this.givenRes.getClass().toString()) &&
+				((Trade)obj).takenRes.getClass().toString().equals(this.takenRes.getClass().toString());
+	}
 }
