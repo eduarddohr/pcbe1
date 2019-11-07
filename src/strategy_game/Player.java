@@ -52,23 +52,25 @@ public class Player extends Thread{
 			ArrayList<Objective> objectiveslist = Game.objectiveslist;
 			Map<String, ArrayList<Resource>> nLResorcesMap;
 			
-			for(int i = 0; i < 10; i++) {
-				getRandomResources(3);
-				System.out.println("resorces: " + name + " " + resources.toString());
-				for (Objective objective : objectiveslist) {
-					System.out.println(System.currentTimeMillis()+" " + name + " tries to build " + objective.toString());
-					nLResorcesMap = objective.checkIfCanBuild(new ArrayList<Resource>(resources));
-					ArrayList<Resource> needed = nLResorcesMap.get("needed");
-					ArrayList<Resource> locked = nLResorcesMap.get("locked");
-					ArrayList<Resource> remaining = nLResorcesMap.get("remaining");
-					nLResorcesMap.toString();
-					//System.out.println(name);
-					if(needed.isEmpty()) {
-						System.out.println(System.currentTimeMillis()+" " + name + " can build " + objective.toString());
-						buildObjective(remaining, locked , objective);
-					}
-					//System.out.println(name + " " + objective.toString());
-				}
+			while(Game.getWon() == false) {
+				getRandomResources(1);
+				System.out.println("resorces: " + name + " " + resources.toString());			
+					for (Objective objective : objectiveslist) {
+						System.out.println(System.currentTimeMillis()+" " + name + " tries to build " + objective.toString());
+						nLResorcesMap = objective.checkIfCanBuild(new ArrayList<Resource>(resources));
+						ArrayList<Resource> needed = nLResorcesMap.get("needed");
+						ArrayList<Resource> locked = nLResorcesMap.get("locked");
+						ArrayList<Resource> remaining = nLResorcesMap.get("remaining");
+						nLResorcesMap.toString();
+						//System.out.println(name);
+						if(needed.isEmpty()) {
+							System.out.println(System.currentTimeMillis()+" " + name + " can build " + objective.toString());
+							semaphore.acquire();
+							buildObjective(remaining, locked , objective);
+							semaphore.release();
+						}
+						//System.out.println(name + " " + objective.toString());
+					}				
 			}
 
 		}
@@ -87,7 +89,10 @@ public class Player extends Thread{
 		this.resources = remaining;
 		int value = objectives.get(objective);
 		objectives.put(objective, value+1);
+		int points = calculatePoints();
 		System.out.println(System.currentTimeMillis() + " "+ this.name+" built "+ objective.toString());
+		if(points >= Game.necessaryPointsToWin && Game.getWon() == false)
+			Game.wonGame(this.name, points);
 		Game.giveBackResources(locked);
 	}
 
