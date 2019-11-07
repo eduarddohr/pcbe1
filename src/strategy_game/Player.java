@@ -55,8 +55,8 @@ public class Player extends Thread {
 			ArrayList<Objective> objectiveslist = Game.objectiveslist;
 			Map<String, ArrayList<Resource>> nLResorcesMap;
 
-			for (int i = 0; i < 10; i++) {
-				getRandomResources(3);
+			while (Game.getWon() == false) {
+				getRandomResources(1);
 				System.out.println("resorces: " + name + " " + resources.toString());
 				for (Objective objective : objectiveslist) {
 					System.out.println(
@@ -70,11 +70,13 @@ public class Player extends Thread {
 					if (needed.isEmpty()) {
 						System.out.println(
 								System.currentTimeMillis() + " " + name + " can build " + objective.toString());
+						semaphore.acquire();
 						buildObjective(remaining, locked, objective);
+						semaphore.release();
 					} else {
 						for (Resource res : needed) {
 							if (remaining.isEmpty()) {
-								//nu plaseaza cerere, e sarac
+								// nu plaseaza cerere, e sarac
 							} else {
 								String exchangeResourceName = Game.getExchangeResourceName(res);
 								if (exchangeResourceName == null) {
@@ -95,16 +97,16 @@ public class Player extends Thread {
 		}
 	}
 
-	private boolean decideIfCanExchange(Resource needed,String requestResourceName, ArrayList<Resource> remaining) throws InterruptedException {
-		Resource[]  requestedResources= (Resource[]) remaining.stream()
-				.filter(el -> el.getClass().toString().equals(requestResourceName))
-				.toArray();
+	private boolean decideIfCanExchange(Resource needed, String requestResourceName, ArrayList<Resource> remaining)
+			throws InterruptedException {
+		Resource[] requestedResources = (Resource[]) remaining.stream()
+				.filter(el -> el.getClass().toString().equals(requestResourceName)).toArray();
 		boolean response = false;
-		if(requestedResources != null && requestedResources.length > 0) {
-			Trade trade = new Trade(this.name,requestedResources[0],needed);
+		if (requestedResources != null && requestedResources.length > 0) {
+			Trade trade = new Trade(this.name, requestedResources[0], needed);
 			response = Game.makeTrade(trade);
 		}
-		
+
 		return response;
 	}
 
@@ -120,6 +122,11 @@ public class Player extends Thread {
 		int value = objectives.get(objective);
 		objectives.put(objective, value + 1);
 		System.out.println(System.currentTimeMillis() + " " + this.name + " built " + objective.toString());
+
+		int points = calculatePoints();
+		if (points >= Game.necessaryPointsToWin && Game.getWon() == false)
+			Game.wonGame(this.name, points);
+
 		Game.giveBackResources(locked);
 	}
 

@@ -25,7 +25,11 @@ public class Game {
 	private static Semaphore woodSemaphore = new Semaphore(1);
 	private static Semaphore stonesSemaphore = new Semaphore(1);
 	
+
 	private static Semaphore tradeSemaphore = new Semaphore(1);
+	
+	//semafor pentru victorie
+	private static Semaphore wonSemaphore = new Semaphore(1);
 	
 	//lista IMUTABILA cu obiective puse in ordinea importantei lor
 	final public static ArrayList < Objective > objectiveslist = new ArrayList < Objective > (
@@ -37,6 +41,10 @@ public class Game {
 	private static ArrayList<Trade> marketplace;
 	
 	final static int nrPlayers = 4;
+	final static int necessaryPointsToWin = 10;
+	
+	public static boolean won = false;
+	private static Player winnerPlayer;
 	
 	public static String getExchangeResourceName(Resource needed){
 		if(marketplace == null || marketplace.isEmpty()) {
@@ -72,9 +80,8 @@ public class Game {
 	
 	public static void main(String[] argv){
 		Game game = new Game();
-		Semaphore semaphore = new Semaphore(1);
 		for(int i = 0; i < nrPlayers; i++) {
-			Player player = new Player(semaphore, "player " + (i+1));
+			Player player = new Player(wonSemaphore, "player " + (i+1));
 			player.start();
 		}	
 		
@@ -134,5 +141,13 @@ public class Game {
 				stonesSemaphore.release();
 			}
 		}
+	}
+	
+	public static void wonGame(String p, int points){
+		won = true;
+		System.out.println(p + " won the game with: " + points + "points");
+	}
+	public static boolean getWon(){
+		return won;
 	}
 }
