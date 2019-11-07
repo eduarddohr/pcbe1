@@ -50,14 +50,14 @@ public class Player extends Thread {
 	public void run() {
 
 		try {
-			// System.out.println("Hello, me is player and will implement the whole game -"
-			// + name);
+//			 System.out.println("Hello, me is player and will implement the whole game -"
+//			 + name);
 			ArrayList<Objective> objectiveslist = Game.objectiveslist;
 			Map<String, ArrayList<Resource>> nLResorcesMap;
 
 			while (Game.getWon() == false) {
 				getRandomResources(1);
-				System.out.println("resorces: " + name + " " + resources.toString());
+				//System.out.println("resorces: " + name + " " + resources.toString());
 				for (Objective objective : objectiveslist) {
 					System.out.println(
 							System.currentTimeMillis() + " " + name + " tries to build " + objective.toString());
@@ -66,13 +66,11 @@ public class Player extends Thread {
 					ArrayList<Resource> locked = nLResorcesMap.get("locked");
 					ArrayList<Resource> remaining = nLResorcesMap.get("remaining");
 					nLResorcesMap.toString();
-					// System.out.println(name);
-					if (needed.isEmpty()) {
+					//System.out.println(name);
+					if (needed.isEmpty() && Game.getWon() == false) {
 						System.out.println(
-								System.currentTimeMillis() + " " + name + " can build " + objective.toString());
-						semaphore.acquire();
+							System.currentTimeMillis() + " " + name + " can build " + objective.toString());
 						buildObjective(remaining, locked, objective);
-						semaphore.release();
 					} else {
 						for (Resource res : needed) {
 							if (remaining.isEmpty()) {
@@ -88,7 +86,7 @@ public class Player extends Thread {
 						}
 					}
 
-					// System.out.println(name + " " + objective.toString());
+					//System.out.println(name + " " + objective.toString());
 				}
 			}
 
@@ -121,13 +119,13 @@ public class Player extends Thread {
 		this.resources = remaining;
 		int value = objectives.get(objective);
 		objectives.put(objective, value + 1);
+		Game.giveBackResources(locked);
 		System.out.println(System.currentTimeMillis() + " " + this.name + " built " + objective.toString());
 
 		int points = calculatePoints();
 		if (points >= Game.necessaryPointsToWin && Game.getWon() == false)
 			Game.wonGame(this.name, points);
 
-		Game.giveBackResources(locked);
 	}
 
 }
