@@ -79,6 +79,11 @@ public class Player extends Thread {
 								String exchangeResourceName = Game.getExchangeResourceName(res);
 								if (exchangeResourceName == null) {
 									// plaseaza cerere
+									Trade trade = new Trade(this.name, remaining.get(0), res); //adaugam trade cu ne trebuie si dam prima care e in plus
+									System.out.println(res);
+									trade.toString();
+									Game.addTrade(trade);
+									sleep(20);
 								} else {
 									boolean exchangeResonse = decideIfCanExchange(res, exchangeResourceName, remaining);
 								}
@@ -91,7 +96,7 @@ public class Player extends Thread {
 			}
 
 		} catch (Exception e) {
-			System.out.println(this.name + e.getMessage() + e.toString() + resources.toString());
+			System.out.println(e.getStackTrace()[0].toString());
 		}
 	}
 

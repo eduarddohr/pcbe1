@@ -27,4 +27,9 @@ public class Trade {
 				((Trade)obj).givenRes.getClass().toString().equals(this.givenRes.getClass().toString()) &&
 				((Trade)obj).takenRes.getClass().toString().equals(this.takenRes.getClass().toString());
 	}
+	@Override	
+	public String toString() {
+		//return name + " wants " + takenRes + " for " + givenRes + ".\n"; 
+		return "";
+	}
 }
