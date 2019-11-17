@@ -81,7 +81,7 @@ public class Player extends Thread {
 									// plaseaza cerere
 									Trade trade = new Trade(this.name, remaining.get(0), res); //adaugam trade cu ne trebuie si dam prima care e in plus
 									System.out.println(res);
-									trade.toString();
+									System.out.println(trade);
 									Game.addTrade(trade);
 									sleep(20);
 								} else {
@@ -106,13 +106,10 @@ public class Player extends Thread {
 
 	private boolean decideIfCanExchange(Resource needed, Resource requestResource, ArrayList<Resource> remaining)
 			throws InterruptedException {
-		Resource[] requestedResources = 
-				(Resource[]) remaining.stream()
-				.filter(el -> el.equals(requestResource))
-				.toArray();
+		
 		boolean response = false;
-		if (requestedResources != null && requestedResources.length > 0) {
-			Trade trade = new Trade(this.name, requestedResources[0], needed);
+		if (remaining.contains(requestResource)) {
+			Trade trade = new Trade(this.name, requestResource, needed);
 			response = Game.makeTrade(trade);
 		}
 
