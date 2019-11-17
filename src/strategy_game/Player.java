@@ -99,14 +99,16 @@ public class Player extends Thread {
 					}
 				}
 			}
-
+			catch(InterruptedException ex) {
+				System.out.println(this.name + "exited the game");
+				return;
+			}
 			catch (Exception e) {
-				
-				System.out.println("ERRROOOORRRR" + this.name + e.getClass());
+				System.out.println("ERRROOOORRRR" +  e.getClass() + " "+this.name + e.getStackTrace()[0].toString());
 				return;
 			}
 		}
-		System.out.println(this.name + "exited the game because someone won");
+		System.out.println(this.name + "exited the game");
 	}
 
 	private boolean decideIfCanExchange(Resource needed, Resource requestResource, ArrayList<Resource> remaining)
