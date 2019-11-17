@@ -2,9 +2,10 @@ package strategy_game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
-
 import objective.Objective;
 import objective.Road;
 import objective.Settlement;
@@ -34,7 +35,7 @@ public class Game {
 	final public static ArrayList<Objective> objectiveslist = new ArrayList<Objective>(
 			Arrays.asList(new Town(), new Settlement(), new Road()));
 
-	private static ArrayList<Trade> marketplace;
+	private static List<Trade> marketplace = new ArrayList<Trade>();
 
 	final static int nrPlayers = 4;
 	final static int necessaryPointsToWin = 10;
@@ -47,7 +48,14 @@ public class Game {
 		if (marketplace == null || marketplace.isEmpty()) {
 			return null;
 		}
-		for (Trade trade : marketplace) {
+//		for (Trade trade : marketplace) {
+//			if (trade.getGivenResourceName().equals(needed.getClass().toString())) {
+//				return trade.getTakenResourceName();
+//			}
+//		}
+		
+		for(Iterator<Trade> iterator = marketplace.iterator(); iterator.hasNext();) {
+			Trade trade = iterator.next();
 			if (trade.getGivenResourceName().equals(needed.getClass().toString())) {
 				return trade.getTakenResourceName();
 			}
@@ -155,5 +163,11 @@ public class Game {
 
 	public static boolean getWon() {
 		return won;
+	}
+	
+	public static void addTrade(Trade trade) throws InterruptedException {
+		tradeSemaphore.acquire();
+		marketplace.add(trade);
+		tradeSemaphore.release();
 	}
 }
