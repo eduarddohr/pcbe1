@@ -38,7 +38,8 @@ public class Game {
 
 	final static int nrPlayers = 4;
 	final static int necessaryPointsToWin = 10;
-
+	
+	private static ArrayList<Player> players = new ArrayList<Player>();
 	public static boolean won = false;
 	private static Player winnerPlayer;
 
@@ -78,6 +79,7 @@ public class Game {
 		Game game = new Game();
 		for (int i = 0; i < nrPlayers; i++) {
 			Player player = new Player(wonSemaphore, "player " + (i + 1));
+			players.add(player);
 			player.start();
 		}
 
@@ -144,6 +146,9 @@ public class Game {
 		if (won == false) {
 			won = true;
 			System.out.println(p + " won the game with: " + points + "points");
+			for(Player player : players) {
+				player.cancel();
+			}
 		}
 		wonSemaphore.release();
 	}
