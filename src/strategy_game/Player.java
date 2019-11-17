@@ -49,16 +49,19 @@ public class Player extends Thread {
 	// cred ca asta e practic takeTurn, dar nu stiu :))
 	public void run() {
 
-		try {
 //			 System.out.println("Hello, me is player and will implement the whole game -"
 //			 + name);
-			ArrayList<Objective> objectiveslist = Game.objectiveslist;
-			Map<String, ArrayList<Resource>> nLResorcesMap;
+		ArrayList<Objective> objectiveslist = Game.objectiveslist;
+		Map<String, ArrayList<Resource>> nLResorcesMap;
 
-			while (Game.getWon() == false) {
+		while (!Thread.currentThread().isInterrupted() && Game.getWon() == false) {
+			try {
 				getRandomResources(1);
-				//System.out.println("resorces: " + name + " " + resources.toString());
+				// System.out.println("resorces: " + name + " " + resources.toString());
 				for (Objective objective : objectiveslist) {
+					if(Game.getWon()) {
+						break;
+					}
 					System.out.println(
 							System.currentTimeMillis() + " " + name + " tries to build " + objective.toString());
 					nLResorcesMap = objective.checkIfCanBuild(new ArrayList<Resource>(resources));
@@ -66,10 +69,10 @@ public class Player extends Thread {
 					ArrayList<Resource> locked = nLResorcesMap.get("locked");
 					ArrayList<Resource> remaining = nLResorcesMap.get("remaining");
 					nLResorcesMap.toString();
-					//System.out.println(name);
+					// System.out.println(name);
 					if (needed.isEmpty() && Game.getWon() == false) {
 						System.out.println(
-							System.currentTimeMillis() + " " + name + " can build " + objective.toString());
+								System.currentTimeMillis() + " " + name + " can build " + objective.toString());
 						buildObjective(remaining, locked, objective);
 					} else {
 						for (Resource res : needed) {
@@ -86,7 +89,7 @@ public class Player extends Thread {
 									sleep(20);
 								} else {
 									boolean exchangeResonse = decideIfCanExchange(res, exchangeResource, remaining);
-									if(exchangeResonse) {
+									if (exchangeResonse) {
 										this.resources.add(res);
 										this.resources.remove(exchangeResource);
 									}
@@ -94,19 +97,22 @@ public class Player extends Thread {
 							}
 						}
 					}
-
-					//System.out.println(name + " " + objective.toString());
 				}
 			}
-
-		} catch (Exception e) {
-			System.out.println(e.getStackTrace()[0].toString());
+			catch(InterruptedException ex) {
+				System.out.println(this.name + "exited the game");
+				return;
+			}
+			catch (Exception e) {
+				System.out.println("ERRROOOORRRR" +  e.getClass() + " "+this.name + e.getStackTrace()[0].toString());
+				return;
+			}
 		}
+		System.out.println(this.name + "exited the game");
 	}
 
 	private boolean decideIfCanExchange(Resource needed, Resource requestResource, ArrayList<Resource> remaining)
 			throws InterruptedException {
-		
 		boolean response = false;
 		if (remaining.contains(requestResource)) {
 			Trade trade = new Trade(this.name, requestResource, needed);
@@ -136,4 +142,7 @@ public class Player extends Thread {
 
 	}
 
+	public void cancel() {
+		interrupt();
+	}
 }

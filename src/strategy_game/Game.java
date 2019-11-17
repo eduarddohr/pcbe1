@@ -39,26 +39,24 @@ public class Game {
 
 	final static int nrPlayers = 4;
 	final static int necessaryPointsToWin = 10;
-
+	
+	private static ArrayList<Player> players = new ArrayList<Player>();
 	public static boolean won = false;
 	private static Player winnerPlayer;
 
-	public static Resource getExchangeResource(Resource needed) {
+	public static Resource getExchangeResource(Resource needed) throws InterruptedException {
 		if (marketplace == null || marketplace.isEmpty()) {
 			return null;
 		}
-//		for (Trade trade : marketplace) {
-//			if (trade.getGivenResourceName().equals(needed.getClass().toString())) {
-//				return trade.getTakenResourceName();
-//			}
-//		}
-		
+		tradeSemaphore.acquire();
 		for(Iterator<Trade> iterator = marketplace.iterator(); iterator.hasNext();) {
 			Trade trade = iterator.next();
 			if (trade.getGivenResourceName().equals(needed.getClass().toString())) {
+				tradeSemaphore.release();
 				return trade.getTakenResourceName();
 			}
 		}
+		tradeSemaphore.release();
 		return null;
 	}
 
@@ -86,9 +84,9 @@ public class Game {
 		Game game = new Game();
 		for (int i = 0; i < nrPlayers; i++) {
 			Player player = new Player(wonSemaphore, "player " + (i + 1));
+			players.add(player);
 			player.start();
 		}
-
 	}
 
 	public static ArrayList<Resource> getRandomResources(int nrRes) throws InterruptedException {
@@ -122,6 +120,12 @@ public class Game {
 				break;
 			}
 		}
+		if(resources.size() != nrRes) {
+			System.out.println("There are not enough resources left to continue the game");
+			for(Player player : players) {
+				player.cancel();
+			}
+		}
 		return resources;
 	}
 
@@ -152,6 +156,9 @@ public class Game {
 		if (won == false) {
 			won = true;
 			System.out.println(p + " won the game with: " + points + "points");
+			for(Player player : players) {
+				player.cancel();
+			}
 		}
 		wonSemaphore.release();
 	}
