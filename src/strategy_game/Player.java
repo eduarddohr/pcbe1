@@ -80,15 +80,24 @@ public class Player extends Thread {
 								if (exchangeResource == null) {
 									// plaseaza cerere
 									Trade trade = new Trade(this.name, remaining.get(0), res); //adaugam trade cu ne trebuie si dam prima care e in plus
-									System.out.println(res);
 									System.out.println(trade);
 									Game.addTrade(trade);
 									sleep(20);
+									if(Game.wasTradeUsed(trade)) {
+										System.out.println(name + " has: " + resources.toString());
+										System.out.println(name + " gave " + remaining.get(0) + " for " + res);
+										this.resources.add(res);
+										this.resources.remove(remaining.get(0));
+										System.out.println(name + " has: " + resources.toString());
+									}
 								} else {
 									boolean exchangeResonse = decideIfCanExchange(res, exchangeResource, remaining);
 									if(exchangeResonse) {
+										System.out.println(name + " has: " + resources.toString());
+										System.out.println(name + " gave " + exchangeResource + " for " + res);
 										this.resources.add(res);
 										this.resources.remove(exchangeResource);
+										System.out.println(name + " has: " + resources.toString());
 									}
 								}
 							}
@@ -100,7 +109,7 @@ public class Player extends Thread {
 			}
 
 		} catch (Exception e) {
-			System.out.println(e.getStackTrace()[0].toString());
+			System.out.println(e.getStackTrace()[2].toString() + "  " + e.toString());
 		}
 	}
 

@@ -43,7 +43,7 @@ public class Game {
 	public static boolean won = false;
 	private static Player winnerPlayer;
 
-	public static Resource getExchangeResource(Resource needed) {
+	public static Resource getExchangeResource(Resource needed) throws InterruptedException {
 		if (marketplace == null || marketplace.isEmpty()) {
 			return null;
 		}
@@ -52,7 +52,6 @@ public class Game {
 //				return trade.getTakenResourceName();
 //			}
 //		}
-		
 		for(Iterator<Trade> iterator = marketplace.iterator(); iterator.hasNext();) {
 			Trade trade = iterator.next();
 			if (trade.getGivenResourceName().equals(needed.getClass().toString())) {
@@ -164,5 +163,12 @@ public class Game {
 		tradeSemaphore.acquire();
 		marketplace.add(trade);
 		tradeSemaphore.release();
+	}
+	public static boolean wasTradeUsed(Trade trade) throws InterruptedException {
+		boolean b = false;
+		tradeSemaphore.acquire();
+		b = marketplace.contains(trade);
+		tradeSemaphore.release();
+		return !b;
 	}
 }
