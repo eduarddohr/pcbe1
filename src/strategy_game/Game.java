@@ -42,7 +42,7 @@ public class Game {
 	public static boolean won = false;
 	private static Player winnerPlayer;
 
-	public static String getExchangeResourceName(Resource needed) {
+	public static Resource getExchangeResource(Resource needed) {
 		if (marketplace == null || marketplace.isEmpty()) {
 			return null;
 		}

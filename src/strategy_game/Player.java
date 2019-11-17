@@ -76,11 +76,15 @@ public class Player extends Thread {
 							if (remaining.isEmpty()) {
 								// nu plaseaza cerere, e sarac
 							} else {
-								String exchangeResourceName = Game.getExchangeResourceName(res);
-								if (exchangeResourceName == null) {
+								Resource exchangeResource = Game.getExchangeResource(res);
+								if (exchangeResource == null) {
 									// plaseaza cerere
 								} else {
-									boolean exchangeResonse = decideIfCanExchange(res, exchangeResourceName, remaining);
+									boolean exchangeResonse = decideIfCanExchange(res, exchangeResource, remaining);
+									if(exchangeResonse) {
+										this.resources.add(res);
+										this.resources.remove(exchangeResource);
+									}
 								}
 							}
 						}
@@ -95,10 +99,12 @@ public class Player extends Thread {
 		}
 	}
 
-	private boolean decideIfCanExchange(Resource needed, String requestResourceName, ArrayList<Resource> remaining)
+	private boolean decideIfCanExchange(Resource needed, Resource requestResource, ArrayList<Resource> remaining)
 			throws InterruptedException {
-		Resource[] requestedResources = (Resource[]) remaining.stream()
-				.filter(el -> el.getClass().toString().equals(requestResourceName)).toArray();
+		Resource[] requestedResources = 
+				(Resource[]) remaining.stream()
+				.filter(el -> el.equals(requestResource))
+				.toArray();
 		boolean response = false;
 		if (requestedResources != null && requestedResources.length > 0) {
 			Trade trade = new Trade(this.name, requestedResources[0], needed);

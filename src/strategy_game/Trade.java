@@ -17,8 +17,8 @@ public class Trade {
 		return this.givenRes.getClass().toString();
 	}
 	
-	public String getTakenResourceName() {
-		return this.takenRes.getClass().toString();
+	public Resource getTakenResourceName(){
+		return takenRes;
 	}
 	
 	@Override 
