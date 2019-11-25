@@ -46,7 +46,6 @@ public class Player extends Thread {
 		return totalPoints;
 	}
 
-	// cred ca asta e practic takeTurn, dar nu stiu :))
 	public void run() {
 
 //			 System.out.println("Hello, me is player and will implement the whole game -"
@@ -119,6 +118,7 @@ public class Player extends Thread {
 				return;
 			}
 		}
+		System.out.println(this.name + "exited the game");
 	}
 
 	private boolean decideIfCanExchange(Resource needed, Resource requestResource, ArrayList<Resource> remaining)
@@ -132,7 +132,7 @@ public class Player extends Thread {
 		return response;
 	}
 
-	// thread safe
+
 	private void getRandomResources(int nrRes) throws InterruptedException {
 		ArrayList<Resource> newResources = Game.getRandomResources(nrRes);
 		resources.addAll(newResources);

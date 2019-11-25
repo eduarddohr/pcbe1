@@ -29,6 +29,6 @@ public class Trade {
 	}
 	@Override	
 	public String toString() {
-		return name + " wants " + takenRes + " for " + givenRes + ".\n"; 
+		return name + " wants " + takenRes + " for " + givenRes + "."; 
 	}
 }
