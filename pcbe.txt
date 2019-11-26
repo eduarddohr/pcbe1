@@ -1,0 +1,60 @@
+- stack-uri resurse 
+- market place -> cereri
+- 3 tipuri de obiective : drum, casa, oras
+- 3 tipuri de resurse : piatra, lemn, caramida
+ 
+ drum - 2 resurse; casa - trei resurse; oras - patru resurse;
+ casa - 1 punct
+ oras - 2 puncte
+ 
+dupa o casa/oras -> trebuie 1 sau 2 drumuri obligatoriu 
+
+interfata resursa
+	piatra
+	lemn
+	caramida
+	
+clasa abstracta obiectiv
+		- metoda default checkIfCanBuild(dictionar de resurse a jucatorului) -> returneaza o lista de doua liste : resurse lipsa, resurse disponibile 
+	disctionar <resursa, numar>
+	valoare obiectiv
+		drum -> implementeaza si interfata resursa(fiind resursa necesara pentru oras)
+		casa
+		oras
+	
+clasa Jucator
+	dictionar de resurse (cheie: nume resursa : valoare : lista/obiect in care memoram numar de resurse avute si numar de resurse busy - avem nevoie de ele)
+	dictionar de obiective
+	nume/id/ceva 
+		- primeste resursa 
+		- da resursa
+		- calculeazaPunctaj -> int
+		- joaca 
+			33 - verifica daca poate construi obiective din lista statica din Joc
+				-daca nu: 
+					jucatorul decide daca se merita sau nu sa incerce sa il construiasca acuma sau trece la urmatorul obiectiv
+						daca da : update disctionar resurse - punem pe busy
+								foreach peste resurse necesare -> verific daca in lista cere/oferta ofera cineva mai multe resurse, daca am ce e nevoie fac schimb-ul
+										daca nu am reusit cu schimb-ul, decid random daca inchei foreach-ul sau continui
+							    repet pasul 33
+								daca inca am nevoie de chestii
+									plaseaza o cerere cu ce ii lipseste, asteapta putin, mai face checkIfCanBuild si construieste, daca nu, continua
+									astept putin sa vad daca primesc 
+										....
+				
+			
+SE POATE APELA O METODA STATICA DIN 2 THREAD-URI DIFERITE? DACA DA, checkIfCanBuild E STATICA	
+			
+clasa Joc
+	facem thread-uri diferite pentru fiecare jocator
+	avem 3 liste/ceva statice si publice pentru fiecare tip de resursa 
+	lista statica de obiective ce se pot construi in joc -> imutabila!!! -> ordonata dupa relevanta
+	lista cerere/oferta
+	metoda de schimb care trebuie sa fie thread safe (lucreaza cu lista cerere/oferta) -> reaturneaza un boolean -> false daca cineva deja face schimb-ul
+	main-ul 
+		
+		
+	
+
+
+

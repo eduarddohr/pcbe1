@@ -2,8 +2,11 @@ package strategy_game;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import objective.Objective;
@@ -55,9 +58,12 @@ public class Player extends Thread {
 
 		while (!Thread.currentThread().isInterrupted() && Game.getWon() == false) {
 			try {
-				getRandomResources(1);
 				// System.out.println("resorces: " + name + " " + resources.toString());
-				for (Objective objective : objectiveslist) {
+				ArrayList<Objective> list = Game.objectiveslist;
+				Collections.shuffle(list);
+				System.out.println(name + " " + list);
+				for (Objective objective : list) {
+					getRandomResources(1);
 					if (Game.getWon()) {
 						break;
 					}
@@ -67,7 +73,6 @@ public class Player extends Thread {
 					ArrayList<Resource> needed = nLResorcesMap.get("needed");
 					ArrayList<Resource> locked = nLResorcesMap.get("locked");
 					ArrayList<Resource> remaining = nLResorcesMap.get("remaining");
-					nLResorcesMap.toString();
 					// System.out.println(name);
 					if (needed.isEmpty() && Game.getWon() == false) {
 						System.out.println(
@@ -86,10 +91,11 @@ public class Player extends Thread {
 																								// care e in plus
 									System.out.println(trade);
 									Game.addTrade(trade);
-									sleep(20);
+									Random rand = new Random();
+									sleep(rand.nextInt(7000));
 									if (Game.wasTradeUsed(trade)) {
 										System.out.println(name + " has: " + resources.toString());
-										System.out.println(name + " gave " + remaining.get(0) + " for " + res);
+										System.out.println("-----" + name + " gave " + remaining.get(0) + " for " + res);
 										this.resources.add(res);
 										this.resources.remove(remaining.get(0));
 										System.out.println(name + " has: " + resources.toString());
@@ -98,7 +104,7 @@ public class Player extends Thread {
 									boolean exchangeResonse = decideIfCanExchange(res, exchangeResource, remaining);
 									if (exchangeResonse) {
 										System.out.println(name + " has: " + resources.toString());
-										System.out.println(name + " gave " + exchangeResource + " for " + res);
+										System.out.println("-----" + name + " recieved " + res + "and gave " + exchangeResource + " in return");
 										this.resources.add(res);
 										this.resources.remove(exchangeResource);
 										System.out.println(name + " has: " + resources.toString());
