@@ -44,7 +44,7 @@ public class Game {
 //	private static List<Trade> marketplace = new ArrayList<Trade>();
 	private static List<Trade> marketplace = new CopyOnWriteArrayList<Trade>();
 
-	final static int nrPlayers = 4;
+	final static int nrPlayers = 5;
 	final static int necessaryPointsToWin = 10;
 	
 	private static ArrayList<Player> players = new ArrayList<Player>();
@@ -82,12 +82,15 @@ public class Game {
 		if (index >= 0) {
 			originalTrade = marketplace.remove(index);
 		}
+		else {
+			tradeWriteSemaphore.release();
+			return false;
+		}
 		tradeWriteSemaphore.release();
-
 		return true;
 	}
 
-	public static void main(String[] argv) {
+	public static void main(String[] argv) throws InterruptedException {
 		Game game = new Game();
 		for (int i = 0; i < nrPlayers; i++) {
 			Player player = new Player(wonSemaphore, "player " + (i + 1));
@@ -179,10 +182,14 @@ public class Game {
 		marketplace.add(trade);
 		tradeWriteSemaphore.release();
 	}
+	
 	public static boolean wasTradeUsed(Trade trade) throws InterruptedException {
 		boolean b = false;
 		tradeReadSemaphore.acquire();
 		b = marketplace.contains(trade);
+		if(b) {
+			marketplace.remove(trade);
+		}
 		tradeReadSemaphore.release();
 		return !b;
 	}
