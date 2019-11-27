@@ -61,7 +61,6 @@ public class Player extends Thread {
 				// System.out.println("resorces: " + name + " " + resources.toString());
 				ArrayList<Objective> list = new ArrayList<Objective>(Game.objectiveslist);
 				Collections.shuffle(list);
-				System.out.println(name + " " + list);
 				for (Objective objective : list) {
 					getRandomResources(1);
 					if (Game.getWon()) {

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Semaphore;
 import objective.Objective;
 import objective.Road;
@@ -26,7 +27,12 @@ public class Game {
 	private static Semaphore woodSemaphore = new Semaphore(1);
 	private static Semaphore stonesSemaphore = new Semaphore(1);
 
+	// semafor pentru marketplace - nefolosit
 	private static Semaphore tradeSemaphore = new Semaphore(1);
+	
+	// semafoare pentru marketplace
+	private static Semaphore tradeReadSemaphore = new Semaphore(1);
+	private static Semaphore tradeWriteSemaphore = new Semaphore(1);
 
 	// semafor pentru victorie
 	private static Semaphore wonSemaphore = new Semaphore(1);
@@ -35,7 +41,8 @@ public class Game {
 	final public static ArrayList<Objective> objectiveslist = new ArrayList<Objective>(
 			Arrays.asList(new Town(), new Settlement(), new Road()));
 
-	private static List<Trade> marketplace = new ArrayList<Trade>();
+//	private static List<Trade> marketplace = new ArrayList<Trade>();
+	private static List<Trade> marketplace = new CopyOnWriteArrayList<Trade>();
 
 	final static int nrPlayers = 5;
 	final static int necessaryPointsToWin = 10;
@@ -48,15 +55,15 @@ public class Game {
 		if (marketplace == null || marketplace.isEmpty()) {
 			return null;
 		}
-		tradeSemaphore.acquire();
+		//tradeReadSemaphore.acquire();
 		for(Iterator<Trade> iterator = marketplace.iterator(); iterator.hasNext();) {
 			Trade trade = iterator.next();
 			if (trade.getGivenResourceName().equals(needed.getClass().toString())) {
-				tradeSemaphore.release();
+				//tradeReadSemaphore.release();
 				return trade.getTakenResourceName();
 			}
 		}
-		tradeSemaphore.release();
+		//tradeReadSemaphore.release();
 		return null;
 	}
 
@@ -70,17 +77,16 @@ public class Game {
 
 	public static boolean makeTrade(Trade trade) throws InterruptedException {
 		Trade originalTrade = null;
-		tradeSemaphore.acquire();
+		tradeWriteSemaphore.acquire();
 		int index = marketplace.indexOf(trade);
 		if (index >= 0) {
 			originalTrade = marketplace.remove(index);
 		}
 		else {
-			tradeSemaphore.release();
+			tradeWriteSemaphore.release();
 			return false;
 		}
-		tradeSemaphore.release();
-
+		tradeWriteSemaphore.release();
 		return true;
 	}
 
@@ -172,19 +178,19 @@ public class Game {
 	}
 	
 	public static void addTrade(Trade trade) throws InterruptedException {
-		tradeSemaphore.acquire();
+		tradeWriteSemaphore.acquire();
 		marketplace.add(trade);
-		tradeSemaphore.release();
+		tradeWriteSemaphore.release();
 	}
 	
 	public static boolean wasTradeUsed(Trade trade) throws InterruptedException {
 		boolean b = false;
-		tradeSemaphore.acquire();
+		tradeReadSemaphore.acquire();
 		b = marketplace.contains(trade);
 		if(b) {
 			marketplace.remove(trade);
 		}
-		tradeSemaphore.release();
+		tradeReadSemaphore.release();
 		return !b;
 	}
 }
