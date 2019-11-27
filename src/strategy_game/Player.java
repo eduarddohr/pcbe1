@@ -59,7 +59,7 @@ public class Player extends Thread {
 		while (!Thread.currentThread().isInterrupted() && Game.getWon() == false) {
 			try {
 				// System.out.println("resorces: " + name + " " + resources.toString());
-				ArrayList<Objective> list = Game.objectiveslist;
+				ArrayList<Objective> list = new ArrayList<Objective>(Game.objectiveslist);
 				Collections.shuffle(list);
 				System.out.println(name + " " + list);
 				for (Objective objective : list) {
