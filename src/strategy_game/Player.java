@@ -86,13 +86,16 @@ public class Player extends Thread {
 																								// care e in plus
 									System.out.println(trade);
 									Game.addTrade(trade);
-									sleep(20);
+									sleep(200);
 									if (Game.wasTradeUsed(trade)) {
 										System.out.println(name + " has: " + resources.toString());
 										System.out.println(name + " gave " + remaining.get(0) + " for " + res);
 										this.resources.add(res);
 										this.resources.remove(remaining.get(0));
 										System.out.println(name + " has: " + resources.toString());
+									}
+									else {
+										Game.removeTrade(trade);
 									}
 								} else {
 									boolean exchangeResonse = decideIfCanExchange(res, exchangeResource, remaining);

@@ -73,11 +73,13 @@ public class Game {
 		tradeSemaphore.acquire();
 		int index = marketplace.indexOf(trade);
 		if (index >= 0) {
+			System.out.println("A trade was made!");
 			originalTrade = marketplace.remove(index);
+			tradeSemaphore.release();
+			return true;
 		}
 		tradeSemaphore.release();
-
-		return true;
+		return false;
 	}
 
 	public static void main(String[] argv) {
@@ -178,5 +180,10 @@ public class Game {
 		b = marketplace.contains(trade);
 		tradeSemaphore.release();
 		return !b;
+	}
+	public static void removeTrade(Trade trade) throws InterruptedException {
+		tradeSemaphore.acquire();
+		marketplace.remove(trade);
+		tradeSemaphore.release();
 	}
 }
